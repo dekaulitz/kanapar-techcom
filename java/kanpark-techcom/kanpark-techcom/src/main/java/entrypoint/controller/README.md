@@ -1,0 +1,1 @@
+Berisi controller yang menjadi pintu masuk utama aplikasi. Controller ini menerima request HTTP dan meneruskannya ke use case.

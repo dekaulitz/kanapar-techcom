@@ -1,0 +1,1 @@
+Berisi objek data transfer (DTO) yang menghubungkan data dari API atau sumber luar dengan model domain.

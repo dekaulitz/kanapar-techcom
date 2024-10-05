@@ -1,0 +1,1 @@
+Berisi konfigurasi spesifik yang diperlukan oleh lapisan infrastruktur, seperti konfigurasi database, messaging (Kafka, RabbitMQ), dll.

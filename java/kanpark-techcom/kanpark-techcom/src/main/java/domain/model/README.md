@@ -1,0 +1,1 @@
+Berisi entitas domain yang merepresentasikan objek bisnis dalam aplikasi

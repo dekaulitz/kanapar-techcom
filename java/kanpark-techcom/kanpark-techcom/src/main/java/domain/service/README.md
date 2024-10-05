@@ -1,0 +1,1 @@
+Berisi logika bisnis yang berlaku di tingkat domain. Service di sini berhubungan dengan aturan bisnis utama yang independen dari infrastruktur.
