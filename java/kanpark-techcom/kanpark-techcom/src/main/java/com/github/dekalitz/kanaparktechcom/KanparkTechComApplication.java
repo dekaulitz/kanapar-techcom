@@ -1,11 +1,15 @@
 package com.github.dekalitz.kanaparktechcom;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 
 import java.util.TimeZone;
 
-@SpringBootApplication
+@SpringBootApplication// Ensure this package contains the controller
+@ComponentScan(basePackages = {"com.github.dekalitz.kanaparktechcom"})
 public class KanparkTechComApplication {
 
 	public static void main(String[] args) {
