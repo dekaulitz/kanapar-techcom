@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.domain.service.api;
+package com.github.dekalitz.kanaparktechcom.domain.service.base;
 
 import com.github.dekalitz.kanaparktechcom.domain.exception.DomainException;
 

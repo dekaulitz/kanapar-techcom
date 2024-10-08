@@ -6,7 +6,6 @@ import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 public class UserDtoMapper {
     public UserDtoMapper() {
     }
-
     public UserModel toUserModel(UserDto userDto) {
         return UserModel.builder()
                 .userName(userDto.getUserName())

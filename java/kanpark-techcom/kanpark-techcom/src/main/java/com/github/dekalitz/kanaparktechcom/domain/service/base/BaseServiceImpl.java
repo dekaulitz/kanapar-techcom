@@ -1,12 +1,12 @@
-package com.github.dekalitz.kanaparktechcom.domain.service.impl;
+package com.github.dekalitz.kanaparktechcom.domain.service.base;
 
 import com.github.dekalitz.kanaparktechcom.domain.exception.DomainException;
-import com.github.dekalitz.kanaparktechcom.domain.repository.BaseRepository;
-import com.github.dekalitz.kanaparktechcom.domain.service.api.BaseService;
+import com.github.dekalitz.kanaparktechcom.domain.outbound.database.BaseRepository;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.Optional;
-
+@Getter
 public class BaseServiceImpl<T> implements BaseService<T> {
     private final BaseRepository<T> repository;
 

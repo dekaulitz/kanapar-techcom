@@ -1,15 +1,14 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.adapter.repository;
 
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
-import com.github.dekalitz.kanaparktechcom.domain.repository.UserRepository;
+import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
-
-    private SingleTonUserDataBase singleTon = SingleTonUserDataBase.getInstance();
+    private SingletonUserData singleTon = SingletonUserData.getInstance();
 
     @Override
     public UserModel save(UserModel userModel) {
@@ -56,5 +55,12 @@ public class UserRepositoryImpl implements UserRepository {
                 })
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public boolean findByEmail(String email) {
+        return singleTon.getUserModelList().stream()
+                .anyMatch(userModel -> userModel.getEmail().equals(email));
+
     }
 }

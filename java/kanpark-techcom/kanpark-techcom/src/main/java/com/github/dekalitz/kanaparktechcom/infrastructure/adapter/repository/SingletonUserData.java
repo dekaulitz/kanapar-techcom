@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class SingleTonUserDataBase {
-    private static SingleTonUserDataBase instance;
+public class SingletonUserData {
+    private static SingletonUserData instance;
     private final List<UserModel> userModelList = new ArrayList<>();
 
-    private SingleTonUserDataBase() {
+    private SingletonUserData() {
     }
 
-    public static SingleTonUserDataBase getInstance() {
+    public static SingletonUserData getInstance() {
         if (null == instance) {
-            instance = new SingleTonUserDataBase();
+            instance = new SingletonUserData();
         }
         return instance;
     }

@@ -1,6 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.entrypoint.controller.advice;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.BaseResponse;
+import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -27,7 +25,14 @@ public class GlobalExceptionHandler {
         baseResponse.setStatus("failed");
         baseResponse.setErrors(errors);
         return new ResponseEntity<>(baseResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<BaseResponse> handleApplicationException(ApplicationException ex) {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatus("failed");
+        baseResponse.setErrors(Arrays.asList(ex.getMessage()));
+        return new ResponseEntity<>(baseResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

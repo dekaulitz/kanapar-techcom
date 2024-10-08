@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.domain.repository;
+package com.github.dekalitz.kanaparktechcom.domain.outbound.database;
 
 import java.util.List;
 import java.util.Optional;
