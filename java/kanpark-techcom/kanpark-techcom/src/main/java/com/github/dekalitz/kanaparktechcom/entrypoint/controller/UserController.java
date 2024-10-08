@@ -5,7 +5,7 @@ import com.github.dekalitz.kanaparktechcom.application.dto.RequestInfo;
 import com.github.dekalitz.kanaparktechcom.application.dto.UserDto;
 import com.github.dekalitz.kanaparktechcom.application.dto.UserRegistrationResult;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
-import com.github.dekalitz.kanaparktechcom.application.mapper.UserDtoMapper;
+import com.github.dekalitz.kanaparktechcom.application.usecase.registration.GetDetailRegistration;
 import com.github.dekalitz.kanaparktechcom.application.usecase.registration.UserRegistration;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
@@ -24,15 +24,15 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
-    private final UserDtoMapper userDtoMapper = new UserDtoMapper();
-
     private final UserRegistration userRegistration;
+    private final GetDetailRegistration getDetailRegistration;
     private final HttpServletRequest request;
 
     @Autowired
-    public UserController(UserService userService, UserRegistration userRegistration, HttpServletRequest request) {
+    public UserController(UserService userService, UserRegistration userRegistration, GetDetailRegistration getDetailRegistration, HttpServletRequest request) {
         this.userService = userService;
         this.userRegistration = userRegistration;
+        this.getDetailRegistration = getDetailRegistration;
         this.request = request;
     }
 
@@ -40,6 +40,15 @@ public class UserController {
     public ResponseEntity<BaseResponse<List<UserModel>>> getAll() {
         BaseResponse<List<UserModel>> response = new BaseResponse<>();
         response.setData(userService.findAll());
+        response.setStatus("ok");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse<UserRegistrationResult>> getDetailRegistration(@PathVariable String id) throws ApplicationException {
+        UserRegistrationResult userRegistrationResult = getDetailRegistration.execute(id);
+        BaseResponse<UserRegistrationResult> response = new BaseResponse<>();
+        response.setData(userRegistrationResult);
         response.setStatus("ok");
         return ResponseEntity.ok(response);
     }
