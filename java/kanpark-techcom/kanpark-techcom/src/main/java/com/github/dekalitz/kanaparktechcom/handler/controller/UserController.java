@@ -2,19 +2,24 @@ package com.github.dekalitz.kanaparktechcom.handler.controller;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.BaseResponse;
 import com.github.dekalitz.kanaparktechcom.application.dto.UserRegistrationResultDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.UserResponseDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailRegistration;
-import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @Slf4j
@@ -31,12 +36,20 @@ public class UserController extends BaseApiController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse<List<UserModel>>> getAll() {
-        BaseResponse<List<UserModel>> response = new BaseResponse<>("OK", userService.findAll(), Collections.emptyList());
+    @PreAuthorize("hasAuthority('USER:READ') or hasRole('USER:WRITE')")
+    public ResponseEntity<BaseResponse<List<UserResponseDto>>> getAll() {
+        List<UserResponseDto> responses = userService.findAll().stream().map(userModel ->
+                UserResponseDto.builder()
+                        .id(userModel.getId())
+                        .email(userModel.getEmail())
+                        .authorities(userModel.getAuthorities())
+                        .build()).toList();
+        BaseResponse<List<UserResponseDto>> response = new BaseResponse<>("OK", responses, Collections.emptyList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('USER:READ') or hasRole('USER:WRITE')")
     public ResponseEntity<BaseResponse<UserRegistrationResultDto>> getDetailRegistration(@PathVariable String id) throws ApplicationException {
         UserRegistrationResultDto userRegistrationResultDto = getDetailRegistration.execute(id);
         BaseResponse<UserRegistrationResultDto> response = new BaseResponse<>("OK", userRegistrationResultDto, Collections.emptyList());

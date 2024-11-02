@@ -4,11 +4,16 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jose4j.jwt.JwtClaims;
+import org.jose4j.jwt.MalformedClaimException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Component
 public class AuthFilter extends OncePerRequestFilter {
@@ -26,21 +31,16 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = getJwtFromRequest(httpServletRequest);
         if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-            Map<String, Object> claims = jwtTokenProvider.getClaims(accessToken);
-//
-//            // Load user details dari service
-//            UserDetails userDetails = authDetailService.loadUserByUsername(username);
-//
-//            // Buat autentikasi berdasarkan token yang valid
-//            UsernamePasswordAuthenticationToken authentication =
-//                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//
-//            // Set autentikasi dalam konteks keamanan
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
+            JwtClaims claims = jwtTokenProvider.getClaims(accessToken);
+            try {
+                UserDetails userDetails = authDetailService.loadUserByUsername(claims.getSubject());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (MalformedClaimException e) {
+                throw new UnauthorizedException(e.getMessage());
+            }
         }
-
-        // Lanjutkan ke filter berikutnya
         filterChain.doFilter(httpServletRequest, response);
     }
 

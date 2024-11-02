@@ -14,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -65,7 +64,7 @@ public class JwtTokenProvider {
     public Boolean validateToken(String jwt) {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime() // Token harus memiliki waktu kedaluwarsa
-                .setAllowedClockSkewInSeconds((int) (toleranceInMinutes * 60)) // Toleransi waktu 30 detik
+                .setAllowedClockSkewInSeconds((int) (toleranceInMinutes * 60)) // Toleransi waktu
                 .setVerificationKey(new org.jose4j.keys.HmacKey(secretKey.getBytes())) // Menggunakan secret key
                 .build();
         try {
@@ -76,15 +75,13 @@ public class JwtTokenProvider {
         }
     }
 
-    public Map<String, Object> getClaims(String jwt) throws UnauthorizedException {
+    public JwtClaims getClaims(String jwt) throws UnauthorizedException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
                 .setVerificationKey(new org.jose4j.keys.HmacKey(secretKey.getBytes()))
                 .build();
-        JwtClaims claims = null;
         try {
-            claims = jwtConsumer.processToClaims(jwt);
-            return claims.getClaimsMap();
+            return jwtConsumer.processToClaims(jwt);
         } catch (InvalidJwtException e) {
             throw new UnauthorizedException(e.getMessage());
         }

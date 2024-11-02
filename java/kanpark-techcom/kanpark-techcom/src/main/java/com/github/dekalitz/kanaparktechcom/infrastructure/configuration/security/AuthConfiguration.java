@@ -43,6 +43,4 @@ public class AuthConfiguration {
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(authenticationProvider);
     }
-
-
 }
