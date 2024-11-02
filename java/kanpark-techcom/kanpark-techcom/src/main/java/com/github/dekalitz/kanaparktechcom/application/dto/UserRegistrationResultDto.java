@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegistrationResult {
+public class UserRegistrationResultDto {
     private String id;
     private String userName;
     private String email;
     private String firstName;
     private String lastName;
 
-    public static UserRegistrationResult fromUserModel(UserModel userModel) {
-        return UserRegistrationResult.builder()
+    public static UserRegistrationResultDto fromUserModel(UserModel userModel) {
+        return UserRegistrationResultDto.builder()
                 .id(userModel.getId())
-                .userName(userModel.getUserName())
+                .userName(userModel.getUsername())
                 .email(userModel.getEmail())
                 .firstName(userModel.getFirstName())
                 .lastName(userModel.getLastName())

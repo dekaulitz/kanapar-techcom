@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class UserModel implements Serializable {
     @NotNull
     private String id;
     @NotBlank
-    private String userName;
+    private String username;
     @NotBlank
     @Email
     private String email;
@@ -29,4 +31,7 @@ public class UserModel implements Serializable {
     private String firstName;
     @NotBlank
     private String lastName;
+    @NotBlank
+    private String password;
+    private List<String> authorities = new ArrayList<>();
 }

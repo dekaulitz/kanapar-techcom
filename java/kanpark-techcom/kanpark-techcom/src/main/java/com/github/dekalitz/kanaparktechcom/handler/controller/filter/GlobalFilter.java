@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.entrypoint.controller.filter;
+package com.github.dekalitz.kanaparktechcom.handler.controller.filter;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.RequestInfo;
 import jakarta.servlet.*;

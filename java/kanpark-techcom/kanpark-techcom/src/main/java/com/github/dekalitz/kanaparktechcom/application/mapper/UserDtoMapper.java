@@ -8,11 +8,12 @@ public class UserDtoMapper {
     }
     public UserModel toUserModel(UserDto userDto) {
         return UserModel.builder()
-                .userName(userDto.getUserName())
+                .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .userName(userDto.getUserName())
+                .firstName(userDto.getFirstname())
+                .lastName(userDto.getLastname())
+                .password(userDto.getPassword())
+                .authorities(userDto.getAuthorities())
                 .build();
     }
 }
