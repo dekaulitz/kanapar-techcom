@@ -28,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Cacheable(value = "UserModel", key = "#id")
+    @Cacheable(value = "UserModel", key = "#id" )
     public Optional<UserModel> findById(String id) {
         return singleTon.getUserModelList()
                 .stream()

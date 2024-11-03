@@ -1,1 +1,0 @@
-Folder ini digunakan untuk konfigurasi yang berkaitan dengan Spring Boot, seperti konfigurasi keamanan, koneksi database, dll.
