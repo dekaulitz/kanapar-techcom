@@ -3,6 +3,7 @@ package com.github.dekalitz.kanaparktechcom.infrastructure.adapter.repository;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.SingletonUserData;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
@@ -27,6 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Cacheable(value = "UserModel", key = "#id")
     public Optional<UserModel> findById(String id) {
         return singleTon.getUserModelList()
                 .stream()
@@ -59,8 +61,8 @@ public class UserRepositoryImpl implements UserRepository {
                 .peek(model -> {
                     model.setUsername(userModel.getUsername());
                     model.setEmail(userModel.getEmail());
-                    model.setFirstName(userModel.getFirstName());
-                    model.setLastName(userModel.getLastName());
+                    model.setFirstname(userModel.getFirstname());
+                    model.setLastname(userModel.getLastname());
                 })
                 .findFirst()
                 .orElse(null);

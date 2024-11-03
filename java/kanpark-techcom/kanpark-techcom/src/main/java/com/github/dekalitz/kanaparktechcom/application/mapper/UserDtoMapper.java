@@ -10,8 +10,8 @@ public class UserDtoMapper {
         return UserModel.builder()
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .firstName(userDto.getFirstname())
-                .lastName(userDto.getLastname())
+                .firstname(userDto.getFirstname())
+                .lastname(userDto.getLastname())
                 .password(userDto.getPassword())
                 .authorities(userDto.getAuthorities())
                 .build();

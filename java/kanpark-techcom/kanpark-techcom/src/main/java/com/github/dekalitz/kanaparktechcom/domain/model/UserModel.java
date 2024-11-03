@@ -28,9 +28,9 @@ public class UserModel implements Serializable {
     @Email
     private String email;
     @NotBlank
-    private String firstName;
+    private String firstname;
     @NotBlank
-    private String lastName;
+    private String lastname;
     @NotBlank
     private String password;
     private List<String> authorities = new ArrayList<>();

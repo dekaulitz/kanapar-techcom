@@ -42,6 +42,9 @@ public class UserController extends BaseApiController {
                 UserResponseDto.builder()
                         .id(userModel.getId())
                         .email(userModel.getEmail())
+                        .firstname(userModel.getFirstname())
+                        .lastname(userModel.getLastname())
+                        .username(userModel.getUsername())
                         .authorities(userModel.getAuthorities())
                         .build()).toList();
         BaseResponse<List<UserResponseDto>> response = new BaseResponse<>("OK", responses, Collections.emptyList());

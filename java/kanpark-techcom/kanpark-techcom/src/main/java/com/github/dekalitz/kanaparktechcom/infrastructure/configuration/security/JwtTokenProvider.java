@@ -36,7 +36,7 @@ public class JwtTokenProvider {
         claims.setIssuedAtToNow();
         claims.setGeneratedJwtId();
         try {
-            return createJwt(claims);
+            return createToken(claims);
         } catch (JoseException e) {
             throw new UnauthorizedException(e.getMessage());
         }
@@ -47,13 +47,13 @@ public class JwtTokenProvider {
         claims.setSubject(accountId);
         claims.setExpirationTimeMinutesInTheFuture(refreshTimeInMinutes); // Refresh token berlaku selama 1 hari
         try {
-            return createJwt(claims);
+            return createToken(claims);
         } catch (JoseException e) {
             throw new UnauthorizedException(e.getMessage());
         }
     }
 
-    private String createJwt(JwtClaims claims) throws JoseException {
+    private String createToken(JwtClaims claims) throws JoseException {
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setKey(new org.jose4j.keys.HmacKey(secretKey.getBytes())); // Menggunakan secret key

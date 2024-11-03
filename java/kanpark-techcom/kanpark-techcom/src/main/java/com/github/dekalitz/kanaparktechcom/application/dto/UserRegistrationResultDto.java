@@ -22,8 +22,8 @@ public class UserRegistrationResultDto {
                 .id(userModel.getId())
                 .userName(userModel.getUsername())
                 .email(userModel.getEmail())
-                .firstName(userModel.getFirstName())
-                .lastName(userModel.getLastName())
+                .firstName(userModel.getFirstname())
+                .lastName(userModel.getLastname())
                 .build();
     }
 }
