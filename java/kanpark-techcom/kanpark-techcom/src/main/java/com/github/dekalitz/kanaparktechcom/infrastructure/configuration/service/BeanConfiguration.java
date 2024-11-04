@@ -11,6 +11,7 @@ import com.github.dekalitz.kanaparktechcom.infrastructure.adapter.repository.Use
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -22,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BeanConfiguration {
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
