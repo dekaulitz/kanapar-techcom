@@ -4,7 +4,7 @@ import com.github.dekalitz.kanaparktechcom.application.dto.BaseResponse;
 import com.github.dekalitz.kanaparktechcom.application.dto.UserRegistrationResultDto;
 import com.github.dekalitz.kanaparktechcom.application.dto.UserResponseDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
-import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailRegistration;
+import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailUsers;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +26,13 @@ import java.util.List;
 public class UserController extends BaseApiController {
     private final UserService userService;
 
-    private final GetDetailRegistration getDetailRegistration;
+    private final GetDetailUsers getDetailUsers;
 
     @Autowired
-    public UserController(UserService userService, GetDetailRegistration getDetailRegistration, HttpServletRequest request) {
+    public UserController(UserService userService, GetDetailUsers getDetailUsers, HttpServletRequest request) {
         super(request);
         this.userService = userService;
-        this.getDetailRegistration = getDetailRegistration;
+        this.getDetailUsers = getDetailUsers;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,7 +54,7 @@ public class UserController extends BaseApiController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('USER:READ') or hasRole('USER:WRITE')")
     public ResponseEntity<BaseResponse<UserRegistrationResultDto>> getDetailRegistration(@PathVariable String id) throws ApplicationException {
-        UserRegistrationResultDto userRegistrationResultDto = getDetailRegistration.execute(id);
+        UserRegistrationResultDto userRegistrationResultDto = getDetailUsers.execute(id);
         BaseResponse<UserRegistrationResultDto> response = new BaseResponse<>("OK", userRegistrationResultDto, Collections.emptyList());
         return ResponseEntity.ok(response);
     }

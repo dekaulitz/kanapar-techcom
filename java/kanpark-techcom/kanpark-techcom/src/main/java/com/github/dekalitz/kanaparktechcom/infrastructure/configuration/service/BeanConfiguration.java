@@ -2,7 +2,7 @@ package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.service
 
 import com.github.dekalitz.kanaparktechcom.application.usecase.auth.UserDoLogin;
 import com.github.dekalitz.kanaparktechcom.application.usecase.auth.UserRegistration;
-import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailRegistration;
+import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailUsers;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
@@ -56,8 +56,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public GetDetailRegistration getDetailRegistration() {
-        return new GetDetailRegistration(getUserService());
+    public GetDetailUsers getDetailRegistration() {
+        return new GetDetailUsers(getUserService());
     }
 
     @Bean

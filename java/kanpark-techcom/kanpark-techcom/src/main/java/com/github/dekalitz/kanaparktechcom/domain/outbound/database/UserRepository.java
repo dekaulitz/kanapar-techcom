@@ -8,4 +8,6 @@ public interface UserRepository extends BaseRepository<UserModel> {
     public UserModel findByEmail(String email);
 
     public UserModel verifyEmailAndPassword(String email, String password);
+
+   public UserModel updateById(String id,UserModel userModel);
 }

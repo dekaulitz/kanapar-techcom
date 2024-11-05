@@ -21,6 +21,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserModel save(UserModel userModel) {
+        if (null == userModel.getCreatedAt()) {
+            userModel.setCreatedAt(new Date());
+        }
+        userModel.setUpdatedAt(new Date());
         userModel.setId(String.valueOf(new Date().getTime()));
         userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
         singleTon.getUserModelList().add(userModel);
@@ -42,8 +46,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean deleteById(String id) {
-        return singleTon.getUserModelList()
+    public void deleteById(String id) {
+        singleTon.getUserModelList()
                 .removeIf(model -> model.getId().equals(id));
     }
 

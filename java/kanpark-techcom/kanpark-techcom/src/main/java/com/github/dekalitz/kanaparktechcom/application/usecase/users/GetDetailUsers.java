@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-public class GetDetailRegistration implements UseCase<UserRegistrationResultDto, String> {
+public class GetDetailUsers implements UseCase<UserRegistrationResultDto, String> {
 
     private final UserService userService;
 
-    public GetDetailRegistration(UserService userService) {
+    public GetDetailUsers(UserService userService) {
         this.userService = userService;
     }
 

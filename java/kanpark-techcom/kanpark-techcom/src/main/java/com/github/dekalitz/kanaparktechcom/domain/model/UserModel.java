@@ -2,26 +2,21 @@ package com.github.dekalitz.kanaparktechcom.domain.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UserModel implements Serializable {
+@Builder(toBuilder = true)
+public class UserModel extends BaseModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @NotNull
-    private String id;
     @NotBlank
     private String username;
     @NotBlank
