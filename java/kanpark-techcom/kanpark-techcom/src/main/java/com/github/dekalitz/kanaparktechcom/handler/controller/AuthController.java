@@ -2,8 +2,9 @@ package com.github.dekalitz.kanaparktechcom.handler.controller;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.*;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
-import com.github.dekalitz.kanaparktechcom.application.usecase.auth.UserDoLogin;
-import com.github.dekalitz.kanaparktechcom.application.usecase.auth.UserRegistration;
+import com.github.dekalitz.kanaparktechcom.application.usecase.auth.DoLogin;
+import com.github.dekalitz.kanaparktechcom.application.usecase.auth.DoRefreshToken;
+import com.github.dekalitz.kanaparktechcom.application.usecase.auth.DoRegistration;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.JwtTokenProvider;
@@ -23,48 +24,36 @@ import java.util.Collections;
 @Slf4j
 public class AuthController extends BaseApiController {
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRegistration userRegistration;
-    private final UserDoLogin userDoLogin;
+    private final DoRegistration doRegistration;
+    private final DoLogin doLogin;
     private final UserService userService;
+    private final DoRefreshToken doRefreshToken;
 
-    public AuthController(HttpServletRequest request, JwtTokenProvider jwtTokenProvider, UserRegistration userRegistration, UserDoLogin userDoLogin, UserService userService) {
+    public AuthController(HttpServletRequest request, JwtTokenProvider jwtTokenProvider, DoRegistration doRegistration, DoLogin doLogin, UserService userService, DoRefreshToken doRefreshToken) {
         super(request);
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userRegistration = userRegistration;
-        this.userDoLogin = userDoLogin;
+        this.doRegistration = doRegistration;
+        this.doLogin = doLogin;
         this.userService = userService;
+        this.doRefreshToken = doRefreshToken;
     }
 
     @GetMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse<AuthDto>> doLogin(@RequestBody @Valid LoginRequestDto loginRequestDto) throws UnauthorizedException, ApplicationException {
-        UserModel userModel = userDoLogin.execute(loginRequestDto);
-        return ResponseEntity.ok(new BaseResponse<>("OK", generateAccessTokenInfo(userModel), Collections.emptyList()));
+        var authInfo = doLogin.execute(loginRequestDto);
+        return ResponseEntity.ok(new BaseResponse<>("OK", authInfo, Collections.emptyList()));
     }
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse<UserRegistrationResultDto>> createUser(@RequestBody @Valid UserDto userDto) throws ApplicationException {
-        UserRegistrationResultDto userRegistrationResultDto = userRegistration.execute(userDto);
-        BaseResponse<UserRegistrationResultDto> response = new BaseResponse<>("OK", userRegistrationResultDto, Collections.emptyList());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponse<UserResultDto>> createUser(@RequestBody @Valid UserDto userDto) throws ApplicationException {
+        var userRegistrationResultDto = doRegistration.execute(userDto);
+        return ResponseEntity.ok(new BaseResponse<>("OK", userRegistrationResultDto, Collections.emptyList()));
     }
 
     @PostMapping(path = "/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse<AuthDto>> doRefresh(@RequestBody @Valid RefreshTokenRequestDto refreshTokenRequestDto) throws ApplicationException, UnauthorizedException, MalformedClaimException {
-        final String accessToken = refreshTokenRequestDto.getAccessToken();
-        final String refreshToken = refreshTokenRequestDto.getRefreshToken();
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new UnauthorizedException("unauthorized request");
-        }
-        var claimsAccessToken = jwtTokenProvider.getClaims(accessToken);
-        var claimsRefreshToken = jwtTokenProvider.getClaims(refreshToken);
-        if (!claimsRefreshToken.getSubject().equals(claimsAccessToken.getSubject())) {
-            throw new UnauthorizedException("unauthorized request");
-        }
-        final UserModel userModel = userService.findById(claimsAccessToken.getSubject()).orElse(null);
-        if (null == userModel) {
-            throw new UnauthorizedException("unauthorized request");
-        }
-        return ResponseEntity.ok(new BaseResponse<>("OK", generateAccessTokenInfo(userModel), Collections.emptyList()));
+        var authInfo = doRefreshToken.execute(refreshTokenRequestDto);
+        return ResponseEntity.ok(new BaseResponse<>("OK", authInfo, Collections.emptyList()));
     }
 
     private AuthDto generateAccessTokenInfo(UserModel userModel) throws UnauthorizedException {

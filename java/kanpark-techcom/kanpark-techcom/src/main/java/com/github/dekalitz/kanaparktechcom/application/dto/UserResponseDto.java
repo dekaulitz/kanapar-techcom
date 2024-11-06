@@ -1,5 +1,6 @@
 package com.github.dekalitz.kanaparktechcom.application.dto;
 
+import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,4 +20,15 @@ public class UserResponseDto implements Serializable {
     private String firstname;
     private String lastname;
     private List<String> authorities = new ArrayList<>();
+
+
+    public static UserResponseDto fromUserModel(UserModel userModel) {
+        return UserResponseDto.builder()
+                .id(userModel.getId())
+                .username(userModel.getUsername())
+                .email(userModel.getEmail())
+                .firstname(userModel.getFirstname())
+                .lastname(userModel.getLastname())
+                .build();
+    }
 }

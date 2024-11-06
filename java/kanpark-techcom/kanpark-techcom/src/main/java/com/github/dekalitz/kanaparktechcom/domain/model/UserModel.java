@@ -1,5 +1,6 @@
 package com.github.dekalitz.kanaparktechcom.domain.model;
 
+import com.github.dekalitz.kanaparktechcom.application.dto.UserDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder
 public class UserModel extends BaseModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -29,4 +30,4 @@ public class UserModel extends BaseModel implements Serializable {
     @NotBlank
     private String password;
     private List<String> authorities = new ArrayList<>();
-}
+    }

@@ -1,6 +1,6 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security;
 
-import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
+
 import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -8,9 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthDetailService implements UserDetailsService {

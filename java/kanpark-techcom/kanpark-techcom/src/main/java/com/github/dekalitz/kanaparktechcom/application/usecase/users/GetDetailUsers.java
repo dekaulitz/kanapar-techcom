@@ -1,6 +1,6 @@
 package com.github.dekalitz.kanaparktechcom.application.usecase.users;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.UserRegistrationResultDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.UserResultDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-public class GetDetailUsers implements UseCase<UserRegistrationResultDto, String> {
+public class GetDetailUsers implements UseCase<UserResultDto, String> {
 
     private final UserService userService;
 
@@ -19,11 +19,11 @@ public class GetDetailUsers implements UseCase<UserRegistrationResultDto, String
     }
 
     @Override
-    public UserRegistrationResultDto execute(String data) throws ApplicationException {
+    public UserResultDto execute(String data) throws ApplicationException {
         Optional<UserModel> userModel = userService.findById(data);
         if (userModel.isEmpty()) {
             throw new ApplicationException("data not found");
         }
-        return UserRegistrationResultDto.fromUserModel(userModel.get());
+        return UserResultDto.fromUserModel(userModel.get());
     }
 }

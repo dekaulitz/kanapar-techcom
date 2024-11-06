@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegistrationResultDto {
+public class UserResultDto {
     private String id;
     private String userName;
     private String email;
     private String firstName;
     private String lastName;
 
-    public static UserRegistrationResultDto fromUserModel(UserModel userModel) {
-        return UserRegistrationResultDto.builder()
+    public static UserResultDto fromUserModel(UserModel userModel) {
+        return UserResultDto.builder()
                 .id(userModel.getId())
                 .userName(userModel.getUsername())
                 .email(userModel.getEmail())
