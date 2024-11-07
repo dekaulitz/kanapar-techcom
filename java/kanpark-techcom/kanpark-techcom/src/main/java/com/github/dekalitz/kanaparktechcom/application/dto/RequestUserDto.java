@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class UserDto implements Serializable {
+public class RequestUserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String id;

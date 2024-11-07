@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginRequestDto implements Serializable {
+public class RequestLoginDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @NotBlank (message = "email cannot be blank")

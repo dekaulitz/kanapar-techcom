@@ -1,7 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.handler.controller.advice;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.BaseResponse;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
+import com.github.dekalitz.kanaparktechcom.application.records.ResultRecord;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +19,24 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BaseResponse<Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResultRecord<Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
-        BaseResponse<Object> baseResponseRecord = new BaseResponse<>("failed", null, errors);
-        return new ResponseEntity<>(baseResponseRecord, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        ResultRecord<Object> resultRecordRecord = new ResultRecord<>("400", "failed", null, errors);
+        return new ResponseEntity<>(resultRecordRecord, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<BaseResponse<Object>> handleApplicationException(ApplicationException ex) {
-        BaseResponse<Object> baseResponseRecord = new BaseResponse<>("failed", null, Collections.singletonList(ex.getMessage()));
-        return new ResponseEntity<>(baseResponseRecord, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResultRecord<Object>> handleApplicationException(ApplicationException ex) {
+        var errCode = ex.getErrorRecord();
+        ResultRecord<Object> resultRecordRecord = new ResultRecord<>(errCode.statusCode(),errCode.status(), null,errCode.messages());
+        return new ResponseEntity<>(resultRecordRecord, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<BaseResponse<Object>> handlingInvalidMethod(HttpRequestMethodNotSupportedException ex) {
-        BaseResponse<Object> baseResponseRecord = new BaseResponse<>("failed", null, Collections.singletonList(ex.getMessage()));
-        return new ResponseEntity<>(baseResponseRecord, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
+    public ResponseEntity<ResultRecord<Object>> handlingInvalidMethod(HttpRequestMethodNotSupportedException ex) {
+        ResultRecord<Object> resultRecordRecord = new ResultRecord<>("400", "failed", null, Collections.singletonList(ex.getMessage()));
+        return new ResponseEntity<>(resultRecordRecord, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
 

@@ -1,9 +1,8 @@
 package com.github.dekalitz.kanaparktechcom.handler.controller;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.BaseResponse;
-import com.github.dekalitz.kanaparktechcom.application.dto.UserDto;
-import com.github.dekalitz.kanaparktechcom.application.dto.UserResultDto;
-import com.github.dekalitz.kanaparktechcom.application.dto.UserResponseDto;
+import com.github.dekalitz.kanaparktechcom.application.records.ResultRecord;
+import com.github.dekalitz.kanaparktechcom.application.dto.RequestUserDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.ResponseUserDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetAllUsers;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailUsers;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,25 +39,24 @@ public class UserController extends BaseApiController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('USER:READ') or hasAuthority('USER:WRITE')")
-    public ResponseEntity<BaseResponse<List<UserResponseDto>>> getAll() throws ApplicationException {
-        List<UserResponseDto> responses = getAllUsers.execute(null);
-        return ResponseEntity.ok(new BaseResponse<>("OK", responses, Collections.emptyList()));
+    public ResponseEntity<ResultRecord<List<ResponseUserDto>>> getAll() throws ApplicationException {
+        ResultRecord<List<ResponseUserDto>> responses = getAllUsers.execute(null);
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('USER:READ') or hasAuthority('USER:WRITE')")
-    public ResponseEntity<BaseResponse<UserResultDto>> getDetailById(@PathVariable String id) throws ApplicationException {
-        UserResultDto userResultDto = getDetailUsers.execute(id);
-        BaseResponse<UserResultDto> response = new BaseResponse<>("OK", userResultDto, Collections.emptyList());
+    public ResponseEntity<ResultRecord<ResponseUserDto>> getDetailById(@PathVariable String id) throws ApplicationException {
+        ResponseUserDto userResultDto = getDetailUsers.execute(id);
+        ResultRecord<ResponseUserDto> response = new ResultRecord<>("OK", userResultDto, Collections.emptyList());
         return ResponseEntity.ok(response);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('USER:WRITE')")
-    public ResponseEntity<BaseResponse<UserResultDto>> updateById(@PathVariable String id, @RequestBody @Valid UserDto userDto) throws ApplicationException {
-
-        UserResultDto userResultDto = getDetailUsers.execute(id);
-        BaseResponse<UserResultDto> response = new BaseResponse<>("OK", userResultDto, Collections.emptyList());
+    public ResponseEntity<ResultRecord<ResponseUserDto>> updateById(@PathVariable String id, @RequestBody @Valid RequestUserDto requestUserDto) throws ApplicationException {
+        ResponseUserDto userResultDto = getDetailUsers.execute(id);
+        ResultRecord<ResponseUserDto> response = new ResultRecord<>("OK", userResultDto, Collections.emptyList());
         return ResponseEntity.ok(response);
     }
 }

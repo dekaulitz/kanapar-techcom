@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class RefreshTokenRequestDto implements Serializable {
+public class RefreshTokenDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String refreshToken;

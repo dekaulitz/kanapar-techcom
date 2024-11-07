@@ -5,7 +5,7 @@ import com.github.dekalitz.kanaparktechcom.application.usecase.auth.DoRefreshTok
 import com.github.dekalitz.kanaparktechcom.application.usecase.auth.DoRegistration;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetAllUsers;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailUsers;
-import com.github.dekalitz.kanaparktechcom.application.usecase.users.UpdateUserDetail;
+import com.github.dekalitz.kanaparktechcom.application.usecase.users.UpdateDetailUsers;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,8 +42,8 @@ public class UseCaseConfiguration {
         return new DoRegistration(this.serviceConfiguration.getUserService());
     }
     @Bean
-    public UpdateUserDetail getUpdateUserDetail() {
-        return new UpdateUserDetail(this.serviceConfiguration.getUserService(), this.repositoryConfiguration.getUserRepository());
+    public UpdateDetailUsers getUpdateUserDetail() {
+        return new UpdateDetailUsers(this.serviceConfiguration.getUserService(), this.repositoryConfiguration.getUserRepository());
     }
     @Bean
     public GetAllUsers getAllUsers() {

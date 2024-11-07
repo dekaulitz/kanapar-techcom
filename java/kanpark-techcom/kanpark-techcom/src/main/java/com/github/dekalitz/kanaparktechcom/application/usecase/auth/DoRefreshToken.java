@@ -1,16 +1,16 @@
 package com.github.dekalitz.kanaparktechcom.application.usecase.auth;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.AuthDto;
-import com.github.dekalitz.kanaparktechcom.application.dto.RefreshTokenRequestDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.ResponseAuthDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.RefreshTokenDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
-import com.github.dekalitz.kanaparktechcom.application.mapper.AuthMapper;
+import com.github.dekalitz.kanaparktechcom.application.mapper.UserMapper;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.JwtTokenProvider;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.UnauthorizedException;
 
-public class DoRefreshToken implements UseCase<AuthDto, RefreshTokenRequestDto> {
+public class DoRefreshToken implements UseCase<ResponseAuthDto, RefreshTokenDto> {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
@@ -20,7 +20,7 @@ public class DoRefreshToken implements UseCase<AuthDto, RefreshTokenRequestDto> 
     }
 
     @Override
-    public AuthDto execute(RefreshTokenRequestDto dto) throws ApplicationException {
+    public ResponseAuthDto execute(RefreshTokenDto dto) throws ApplicationException {
         try {
             var accessToken = dto.getAccessToken();
             var refreshToken = dto.getRefreshToken();
@@ -38,7 +38,7 @@ public class DoRefreshToken implements UseCase<AuthDto, RefreshTokenRequestDto> 
             }
             String newAccessToken = jwtTokenProvider.generateAccessToken(userModel);
             String newRefreshToken = jwtTokenProvider.generateRefreshToken(userModel.getId());
-            return AuthMapper.constructNewAccessInfo(newAccessToken, newRefreshToken, userModel);
+            return UserMapper.constructNewAccessInfo(newAccessToken, newRefreshToken, userModel);
         } catch (Exception exception) {
             throw new ApplicationException("something");
         }

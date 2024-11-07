@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthDto {
+public class ResponseAuthDto {
     private String accountId;
     private String username;
     private String email;

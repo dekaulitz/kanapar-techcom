@@ -4,4 +4,5 @@ import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationExce
 
 public interface UseCase<R, T> {
     public R execute(T dto) throws ApplicationException;
+
 }

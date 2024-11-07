@@ -16,4 +16,5 @@ public class BaseApiController {
     protected RequestInfo getRequestInfo() {
         return (RequestInfo) request.getAttribute("requestInfo");
     }
+
 }

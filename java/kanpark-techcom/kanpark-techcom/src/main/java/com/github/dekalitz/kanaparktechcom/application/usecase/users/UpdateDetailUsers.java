@@ -1,8 +1,8 @@
 package com.github.dekalitz.kanaparktechcom.application.usecase.users;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.UserResultDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.ResponseUserDto;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
-import com.github.dekalitz.kanaparktechcom.application.records.UpdateUserRecord;
+import com.github.dekalitz.kanaparktechcom.application.records.UpdateUserUseCaseRecord;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.mapper.UserModelMapper;
 import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
@@ -10,24 +10,24 @@ import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserServic
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class UpdateUserDetail implements UseCase<UserResultDto, UpdateUserRecord> {
+public class UpdateDetailUsers implements UseCase<ResponseUserDto, UpdateUserUseCaseRecord> {
 
     private final UserService userService;
 
     private final UserRepository userRepository;
 
-    public UpdateUserDetail(UserService userService, UserRepository userRepository) {
+    public UpdateDetailUsers(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserResultDto execute(UpdateUserRecord data) throws ApplicationException {
+    public ResponseUserDto execute(UpdateUserUseCaseRecord data) throws ApplicationException {
         var exists = userRepository.isExists(data.userId());
         if (exists) {
             throw new ApplicationException("data not found");
         }
-        var userModel = userService.save(UserModelMapper.fromUserDto(data.userId(), data.userDto()));
-        return UserResultDto.fromUserModel(userModel);
+        var userModel = userService.save(UserModelMapper.fromUserDto(data.userId(), data.requestUserDto()));
+        return ResponseUserDto.fromUserModel(userModel);
     }
 }

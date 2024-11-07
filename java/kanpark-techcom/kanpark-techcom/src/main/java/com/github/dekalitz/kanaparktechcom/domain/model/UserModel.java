@@ -1,6 +1,5 @@
 package com.github.dekalitz.kanaparktechcom.domain.model;
 
-import com.github.dekalitz.kanaparktechcom.application.dto.UserDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

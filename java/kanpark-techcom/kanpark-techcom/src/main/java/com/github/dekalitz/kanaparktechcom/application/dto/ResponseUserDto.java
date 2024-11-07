@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class UserResponseDto implements Serializable {
+public class ResponseUserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private String id;
@@ -22,8 +22,8 @@ public class UserResponseDto implements Serializable {
     private List<String> authorities = new ArrayList<>();
 
 
-    public static UserResponseDto fromUserModel(UserModel userModel) {
-        return UserResponseDto.builder()
+    public static ResponseUserDto fromUserModel(UserModel userModel) {
+        return ResponseUserDto.builder()
                 .id(userModel.getId())
                 .username(userModel.getUsername())
                 .email(userModel.getEmail())
