@@ -1,0 +1,251 @@
+{
+  "info": {
+    "_postman_id": "555db301-f458-4482-94da-bff05068c16b",
+    "name": "kanapark-techcom",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "326165",
+    "_collection_link": "https://kana-park-tech.postman.co/workspace/internal-projects~01b29f60-f095-45e5-a97b-e4ba228f00e4/collection/326165-555db301-f458-4482-94da-bff05068c16b?action=share&source=collection_link&creator=326165"
+  },
+  "item": [
+    {
+      "name": "find all",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"fahmi\",\r\n    \"firstName\":\"fahmi\",\r\n    \"lastName\":\"sulaiman\",\r\n    \"email\":\"sulaimanfahmi@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/users"
+      },
+      "response": []
+    },
+    {
+      "name": "get detail",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-account-id",
+            "value": "123123123123",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userName\":\"fahmi\",\r\n    \"firstName\":\"fahmi\",\r\n    \"lastName\":\"sulaiman\",\r\n    \"email\":\"sdfssdf@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/users/1728411780553"
+      },
+      "response": []
+    },
+    {
+      "name": "REGISTER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let responseData = pm.response.json(); // Mengurai respons JSON\r",
+              "let userId = responseData.data.id; // Mengambil userId\r",
+              "// Menyimpan userId ke variabel lingkungan\r",
+              "pm.environment.set(\"userId\", userId);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\":\"fahmi\",\r\n    \"firstname\":\"fahmi\",\r\n    \"lastname\":\"sulaiman\",\r\n    \"email\":\"sulaimansfahmi@gmail.com\",\r\n    \"password\":\"sulaimanfahmi\",\r\n    \"authorities\":[\r\n        \"USER:WRITE\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/auth/register"
+      },
+      "response": []
+    },
+    {
+      "name": "LOGIN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let responseData = pm.response.json(); // Mengurai respons JSON\r",
+              "let accessToken = responseData.data.accessToken; // Mengambil userId\r",
+              "\r",
+              "let refreshToken = responseData.data.refreshToken; // Mengambil userId\r",
+              "\r",
+              "// Menyimpan userId ke variabel lingkungan\r",
+              "pm.environment.set(\"accessToken\", accessToken);\r",
+              "pm.environment.set(\"refreshToken\", refreshToken);\r",
+              "\r",
+              "// Menampilkan userId di konsol untuk verifikasi\r",
+              "console.log(\"User ID:\", accessToken);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"sulaimanfahmi@gmail.com\",\r\n    \"password\":\"sulaimanfahmi\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/auth/login"
+      },
+      "response": []
+    },
+    {
+      "name": "REFRESH_TOKEN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let responseData = pm.response.json(); // Mengurai respons JSON\r",
+              "let accessToken = responseData.data.accessToken; // Mengambil userId\r",
+              "\r",
+              "let refreshToken = responseData.data.refreshToken; // Mengambil userId\r",
+              "\r",
+              "// Menyimpan userId ke variabel lingkungan\r",
+              "pm.environment.set(\"accessToken\", accessToken);\r",
+              "pm.environment.set(\"refreshToken\", refreshToken);\r",
+              "\r",
+              "// Menampilkan userId di konsol untuk verifikasi\r",
+              "console.log(\"User ID:\", accessToken);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n          \"accessToken\": \"{{accessToken}}\",\r\n        \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/auth/refresh-token"
+      },
+      "response": []
+    },
+    {
+      "name": "LOGOUT",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let responseData = pm.response.json(); // Mengurai respons JSON\r",
+              "let accessToken = responseData.data.accessToken; // Mengambil userId\r",
+              "\r",
+              "let refreshToken = responseData.data.refreshToken; // Mengambil userId\r",
+              "\r",
+              "// Menyimpan userId ke variabel lingkungan\r",
+              "pm.environment.set(\"accessToken\", accessToken);\r",
+              "pm.environment.set(\"refreshToken\", refreshToken);\r",
+              "\r",
+              "// Menampilkan userId di konsol untuk verifikasi\r",
+              "console.log(\"User ID:\", accessToken);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n          \"accessToken\": \"{{accessToken}}\",\r\n        \"refreshToken\": \"{{refreshToken}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "localhost:8080/api/v1/auth/logout"
+      },
+      "response": []
+    }
+  ]
+}
