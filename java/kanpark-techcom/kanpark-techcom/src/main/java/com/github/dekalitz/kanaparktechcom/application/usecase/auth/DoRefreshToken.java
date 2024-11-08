@@ -41,6 +41,7 @@ public class DoRefreshToken extends BaseCase<ResponseAuthDto> implements UseCase
             if (null == userModel) {
                 throw new UnauthorizedException("unauthorized request");
             }
+            jwtTokenProvider.revoke(accessToken,refreshToken);
             String newAccessToken = jwtTokenProvider.generateAccessToken(userModel);
             String newRefreshToken = jwtTokenProvider.generateRefreshToken(userModel.getId());
             return ok(UserMapper.constructNewAccessInfo(newAccessToken, newRefreshToken, userModel));

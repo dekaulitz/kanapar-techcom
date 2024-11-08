@@ -40,4 +40,8 @@ public record ErrorCode(String statusCode, List<String> messages, Integer httpCo
     public static ErrorCode errorOnGenerateRefreshToken(String message) {
         return new ErrorCode("X450", Collections.singletonList(message), 403);
     }
+
+    public static ErrorCode errorOnInvalidMethod(String message) {
+        return new ErrorCode("X455", Collections.singletonList(message), 405);
+    }
 }

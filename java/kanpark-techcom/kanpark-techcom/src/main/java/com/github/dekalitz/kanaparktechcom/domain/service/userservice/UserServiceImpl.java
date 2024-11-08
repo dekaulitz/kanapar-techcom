@@ -2,7 +2,7 @@ package com.github.dekalitz.kanaparktechcom.domain.service.userservice;
 
 import com.github.dekalitz.kanaparktechcom.domain.exception.DomainException;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.domain.service.base.BaseServiceImpl;
 
 public class UserServiceImpl extends BaseServiceImpl<UserModel> implements UserService {
@@ -15,7 +15,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserModel> implements UserS
 
     @Override
     public boolean isEmailExists(String email) {
-        return null != this.userRepository.findByEmail(email);
+        return userRepository.emailIsExists(email);
     }
 
     @Override

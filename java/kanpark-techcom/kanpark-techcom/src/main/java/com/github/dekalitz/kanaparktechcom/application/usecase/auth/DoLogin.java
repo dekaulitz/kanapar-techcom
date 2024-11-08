@@ -9,7 +9,7 @@ import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import com.github.dekalitz.kanaparktechcom.application.usecase.BaseCase;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 

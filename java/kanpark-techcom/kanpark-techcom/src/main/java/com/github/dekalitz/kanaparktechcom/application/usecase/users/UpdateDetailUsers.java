@@ -8,7 +8,7 @@ import com.github.dekalitz.kanaparktechcom.application.records.UpdateUserUseCase
 import com.github.dekalitz.kanaparktechcom.application.usecase.BaseCase;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.mapper.UserModelMapper;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.handler.controller;
+package com.github.dekalitz.kanaparktechcom.handler.http.controller;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.RequestUserDto;
 import com.github.dekalitz.kanaparktechcom.application.dto.ResponseUserDto;
@@ -7,6 +7,7 @@ import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationExce
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetAllUsers;
 import com.github.dekalitz.kanaparktechcom.application.usecase.users.GetDetailUsers;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
+import com.github.dekalitz.kanaparktechcom.handler.http.BaseApiController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

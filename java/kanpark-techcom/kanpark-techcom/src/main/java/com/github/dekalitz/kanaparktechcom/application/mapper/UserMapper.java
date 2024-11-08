@@ -37,6 +37,7 @@ public class UserMapper {
                 .email(userModel.getEmail())
                 .firstname(userModel.getFirstname())
                 .lastname(userModel.getLastname())
+                .authorities(userModel.getAuthorities())
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.domain.outbound.database;
+package com.github.dekalitz.kanaparktechcom.domain.repository.database;
 
 import com.github.dekalitz.kanaparktechcom.domain.model.BaseModel;
 

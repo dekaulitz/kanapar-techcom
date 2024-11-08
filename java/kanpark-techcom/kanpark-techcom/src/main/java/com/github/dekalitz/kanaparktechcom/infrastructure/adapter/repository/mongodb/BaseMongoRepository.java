@@ -1,7 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.adapter.repository.mongodb;
 
 import com.github.dekalitz.kanaparktechcom.domain.model.BaseModel;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.BaseRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.BaseRepository;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;

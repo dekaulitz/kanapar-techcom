@@ -1,7 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.domain.service.base;
 
 import com.github.dekalitz.kanaparktechcom.domain.model.BaseModel;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.BaseRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.BaseRepository;
 import lombok.Getter;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.github.dekalitz.kanaparktechcom.handler.controller.error;
+package com.github.dekalitz.kanaparktechcom.handler.http.error;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

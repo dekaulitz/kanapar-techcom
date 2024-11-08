@@ -1,7 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.adapter.repository;
 
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
-import com.github.dekalitz.kanaparktechcom.domain.outbound.database.UserRepository;
+import com.github.dekalitz.kanaparktechcom.domain.repository.database.UserRepository;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.SingletonUserData;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,12 +10,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl extends BaseRepository implements UserRepository {
     private final SingletonUserData<UserModel> singleTon = SingletonUserData.getInstance();
 
     private final PasswordEncoder passwordEncoder;
+    private final static String COLLECTION_NAME = "user";
 
     public UserRepositoryImpl(PasswordEncoder passwordEncoder) {
+        super(COLLECTION_NAME);
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,7 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Cacheable(value = "UserModel", key = "#id" )
+    @Cacheable(value = "UserModel", key = "#id")
     public Optional<UserModel> findById(String id) {
         return singleTon.getUserModelList()
                 .stream()

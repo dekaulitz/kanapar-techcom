@@ -3,9 +3,11 @@ package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.securit
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
+import com.github.dekalitz.kanaparktechcom.domain.repository.cache.AuthCache;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
+import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
@@ -28,6 +30,12 @@ public class JwtTokenProvider {
     private long refreshTimeInMinutes;
     @Value("${auth.configuration.token.tolerance.time.inMinutes}")
     private long toleranceInMinutes;
+    private final AuthCache authCache;
+
+
+    public JwtTokenProvider(AuthCache authCache) {
+        this.authCache = authCache;
+    }
 
     public String generateAccessToken(UserModel userModel) throws ApplicationException {
         List<GrantedAuthority> grantedAuthorities = userModel.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -38,8 +46,9 @@ public class JwtTokenProvider {
         claims.setIssuedAtToNow();
         claims.setGeneratedJwtId();
         try {
+            authCache.setCacheAndExpired( claims.getJwtId(), userModel.getId(), tokenExpirationTimeInMinutes);
             return createToken(claims);
-        } catch (JoseException e) {
+        } catch (JoseException | MalformedClaimException e) {
             throw new ApplicationException(ErrorCode.errorOnGenerateToken(e.getMessage()));
         }
     }
@@ -48,9 +57,11 @@ public class JwtTokenProvider {
         JwtClaims claims = new JwtClaims();
         claims.setSubject(accountId);
         claims.setExpirationTimeMinutesInTheFuture(refreshTimeInMinutes); // Refresh token berlaku selama 1 hari
+        claims.setGeneratedJwtId();
         try {
+            authCache.setCacheAndExpired(claims.getJwtId(), accountId, refreshTimeInMinutes);
             return createToken(claims);
-        } catch (JoseException e) {
+        } catch (JoseException | MalformedClaimException e) {
             throw new ApplicationException(ErrorCode.errorOnGenerateRefreshToken(e.getMessage()));
         }
     }
@@ -87,6 +98,16 @@ public class JwtTokenProvider {
         } catch (InvalidJwtException e) {
             throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid(e.getMessage()));
         }
+    }
 
+    public void revoke(String accessToken, String refreshToken) throws ApplicationException {
+        try {
+            JwtClaims accessTokenClaims = getClaims(accessToken);
+            JwtClaims refreshTokenClaims = getClaims(refreshToken);
+            authCache.clear( accessTokenClaims.getJwtId());
+            authCache.clear(refreshTokenClaims.getJwtId());
+        } catch (MalformedClaimException | UnauthorizedException e) {
+            throw new ApplicationException(ErrorCode.errorOnGenerateRefreshToken(e.getMessage()));
+        }
     }
 }
