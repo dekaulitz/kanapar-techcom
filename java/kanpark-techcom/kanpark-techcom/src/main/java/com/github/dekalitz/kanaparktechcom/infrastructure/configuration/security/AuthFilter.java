@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
+import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -32,20 +33,30 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setRemoteAddr(((HttpServletRequest) httpServletRequest).getRemoteAddr());
+        requestInfo.setRemoteAddr((httpServletRequest).getRemoteAddr());
         requestInfo.setRequestId(httpServletRequest.getRequestId());
         requestInfo.setAccountId("0");
         String accessToken = getJwtFromRequest(httpServletRequest);
-        if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-            JwtClaims claims = jwtTokenProvider.getClaims(accessToken);
+        if (accessToken != null) {
             try {
-                var userDetailInfo = authDetailService.loadUserByUsername(claims.getJwtId());
-                UserAuthToken authentication = new UserAuthToken(userDetailInfo, userDetailInfo.getPassword(), userDetailInfo.getAuthorities(), userDetailInfo.getAccountId(), userDetailInfo.getEmail());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                requestInfo.setAccountId(userDetailInfo.getAccountId());
+                final Boolean isTokenValid = jwtTokenProvider.isTokenValid(accessToken);
+                if (isTokenValid) {
+                    JwtClaims claims = jwtTokenProvider.getClaims(accessToken);
+                    var userDetailInfo = authDetailService.loadUserByUsername(claims.getJwtId());
+                    UserAuthToken authentication = new UserAuthToken(userDetailInfo, userDetailInfo.getPassword(), userDetailInfo.getAuthorities(), userDetailInfo.getAccountId(), userDetailInfo.getEmail());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    requestInfo.setAccountId(userDetailInfo.getAccountId());
+                } else {
+                    throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid());
+                }
             } catch (MalformedClaimException e) {
-                throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid(e.getMessage()));
+                throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid());
+            } catch (InvalidJwtException e) {
+                if (e.hasExpired()) {
+                    throw new UnauthorizedException(ErrorCode.errorOnTokenExpired("token expired"));
+                }
+                throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid());
             }
         }
         httpServletRequest.setAttribute("requestInfo", requestInfo);

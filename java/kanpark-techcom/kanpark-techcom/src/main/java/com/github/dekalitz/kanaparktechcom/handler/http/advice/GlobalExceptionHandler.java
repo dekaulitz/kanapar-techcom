@@ -4,7 +4,6 @@ import com.github.dekalitz.kanaparktechcom.application.dto.Response;
 import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
 import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security.UnauthorizedException;
-import jakarta.servlet.ServletException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,14 +35,10 @@ public class GlobalExceptionHandler {
         var errCode = ex.getErrorCode();
         return getResponseResponseEntity(errCode);
     }
-    @ExceptionHandler(ServletException.class)
-    public ResponseEntity<Response<Object>> handleApplicationException(ServletException ex) {
-        if (ex instanceof UnauthorizedException) {
-            var errCode = ((UnauthorizedException) ex).getErrorCode();
-            return getResponseResponseEntity(errCode);
-        }
-
-        return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Response<Object>> handleApplicationException(UnauthorizedException ex) {
+        var errCode = ex.getErrorCode();
+        return getResponseResponseEntity(errCode);
     }
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Response<Object>> handleAccessDeniedException(AuthenticationException ex) {
@@ -55,13 +49,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response<Object>> handlingInvalidMethod(HttpRequestMethodNotSupportedException ex) {
         var errCode = ErrorCode.errorOnInvalidMethod(ex.getMessage());
         var result = new Response<>(new Response.MetaResponse("failed"), null,
-                new Response.ErrorResponse(errCode.statusCode(), Strings.join(errCode.messages(), ',')));
+                new Response.ErrorResponse(errCode.statusCode(), errCode.message()));
 
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
     private ResponseEntity<Response<Object>> getResponseResponseEntity(ErrorCode errCode) {
         var result = new Response<>(new Response.MetaResponse("failed"), null,
-                new Response.ErrorResponse(errCode.statusCode(), Strings.join(errCode.messages(), ',')));
+                new Response.ErrorResponse(errCode.statusCode(), errCode.message()));
         var httpCode = HttpStatus.resolve(errCode.httpCode());
         return new ResponseEntity<>(result, new HttpHeaders(), httpCode != null ? httpCode : HttpStatus.BAD_REQUEST);
     }

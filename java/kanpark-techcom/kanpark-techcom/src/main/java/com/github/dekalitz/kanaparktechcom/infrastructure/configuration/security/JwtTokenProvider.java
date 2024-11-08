@@ -46,7 +46,7 @@ public class JwtTokenProvider {
         claims.setIssuedAtToNow();
         claims.setGeneratedJwtId();
         try {
-            authCache.setCacheAndExpired( claims.getJwtId(), userModel.getId(), tokenExpirationTimeInMinutes);
+            authCache.setCacheAndExpired(claims.getJwtId(), userModel.getId(), tokenExpirationTimeInMinutes + toleranceInMinutes);
             return createToken(claims);
         } catch (JoseException | MalformedClaimException e) {
             throw new ApplicationException(ErrorCode.errorOnGenerateToken(e.getMessage()));
@@ -74,18 +74,14 @@ public class JwtTokenProvider {
         return jws.getCompactSerialization();
     }
 
-    public Boolean validateToken(String jwt) {
+    public Boolean isTokenValid(String jwt) throws InvalidJwtException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime() // Token harus memiliki waktu kedaluwarsa
                 .setAllowedClockSkewInSeconds((int) (toleranceInMinutes * 60)) // Toleransi waktu
                 .setVerificationKey(new org.jose4j.keys.HmacKey(secretKey.getBytes())) // Menggunakan secret key
                 .build();
-        try {
-            jwtConsumer.processToClaims(jwt);
-            return true;
-        } catch (InvalidJwtException e) {
-            return false;
-        }
+        jwtConsumer.processToClaims(jwt);
+        return true;
     }
 
     public JwtClaims getClaims(String jwt) throws UnauthorizedException {
@@ -104,7 +100,7 @@ public class JwtTokenProvider {
         try {
             JwtClaims accessTokenClaims = getClaims(accessToken);
             JwtClaims refreshTokenClaims = getClaims(refreshToken);
-            authCache.clear( accessTokenClaims.getJwtId());
+            authCache.clear(accessTokenClaims.getJwtId());
             authCache.clear(refreshTokenClaims.getJwtId());
         } catch (MalformedClaimException | UnauthorizedException e) {
             throw new ApplicationException(ErrorCode.errorOnGenerateRefreshToken(e.getMessage()));

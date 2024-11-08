@@ -29,7 +29,7 @@ public class DoRefreshToken extends BaseCase<ResponseAuthDto> implements UseCase
         try {
             var accessToken = dto.getAccessToken();
             var refreshToken = dto.getRefreshToken();
-            if (!jwtTokenProvider.validateToken(refreshToken)) {
+            if (!jwtTokenProvider.isTokenValid(refreshToken)) {
                 throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid());
             }
             var claimsAccessToken = jwtTokenProvider.getClaims(accessToken);

@@ -1,19 +1,24 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security;
 
 import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
-import jakarta.servlet.ServletException;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 @Getter
-public class UnauthorizedException extends ServletException {
+public class UnauthorizedException extends InsufficientAuthenticationException {
     private ErrorCode errorCode;
 
-    public UnauthorizedException(String message) {
-        super(message);
+    public UnauthorizedException(String msg) {
+        super(msg);
+    }
+
+    public UnauthorizedException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
     public UnauthorizedException(ErrorCode errorCode) {
-        super();
+        super(StringUtils.join(errorCode.message()));
         this.errorCode = errorCode;
     }
 }

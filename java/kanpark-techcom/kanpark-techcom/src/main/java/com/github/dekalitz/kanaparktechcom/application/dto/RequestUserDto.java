@@ -18,8 +18,8 @@ public class RequestUserDto implements Serializable {
     private String id;
     @NotBlank(message = "username required")
     private String username;
-    @NotBlank
-    @Email
+    @NotBlank(message = "email required")
+    @Email(message = "email not valid")
     private String email;
     @NotBlank(message = "firstname required")
     private String firstname;
