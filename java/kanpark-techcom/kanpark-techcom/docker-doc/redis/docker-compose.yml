@@ -1,0 +1,13 @@
+# Use root/example as user/password credentials
+version: '3.1'
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    # command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server
+    volumes:
+      # - C:\Users\Dekaulitz\Projects\docker\redis\redis.conf:/usr/local/etc/redis/redis.conf
+      - C:\Users\Dekaulitz\Projects\docker\redis\data:/data
+    ports:
+      - 6379:6379
