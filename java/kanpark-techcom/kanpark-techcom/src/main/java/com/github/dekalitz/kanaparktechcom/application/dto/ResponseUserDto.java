@@ -22,13 +22,5 @@ public class ResponseUserDto implements Serializable {
     private List<String> authorities = new ArrayList<>();
 
 
-    public static ResponseUserDto fromUserModel(UserModel userModel) {
-        return ResponseUserDto.builder()
-                .id(userModel.getId())
-                .username(userModel.getUsername())
-                .email(userModel.getEmail())
-                .firstname(userModel.getFirstname())
-                .lastname(userModel.getLastname())
-                .build();
-    }
+
 }

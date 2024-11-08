@@ -14,7 +14,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserModel> implements UserS
     }
 
     @Override
-    public boolean findByEmail(String email) {
+    public boolean isEmailExists(String email) {
         return null != this.userRepository.findByEmail(email);
     }
 

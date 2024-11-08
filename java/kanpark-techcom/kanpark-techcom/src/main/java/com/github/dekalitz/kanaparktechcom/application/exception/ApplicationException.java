@@ -1,11 +1,14 @@
 package com.github.dekalitz.kanaparktechcom.application.exception;
 
-import com.github.dekalitz.kanaparktechcom.application.records.ErrorRecord;
+import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class ApplicationException extends Exception {
-    private ErrorRecord errorRecord;
+public class ApplicationException extends Exception implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private ErrorCode errorCode;
 
     public ApplicationException() {
         super();
@@ -15,9 +18,9 @@ public class ApplicationException extends Exception {
         super(message);
     }
 
-    public ApplicationException(ErrorRecord message) {
+    public ApplicationException(ErrorCode message) {
         super();
-        this.errorRecord = message;
+        this.errorCode = message;
     }
 
     public ApplicationException(String message, Throwable cause) {

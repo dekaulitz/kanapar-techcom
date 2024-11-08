@@ -1,5 +1,7 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security;
 
+import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
+import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -27,7 +29,7 @@ public class JwtTokenProvider {
     @Value("${auth.configuration.token.tolerance.time.inMinutes}")
     private long toleranceInMinutes;
 
-    public String generateAccessToken(UserModel userModel) throws UnauthorizedException {
+    public String generateAccessToken(UserModel userModel) throws ApplicationException {
         List<GrantedAuthority> grantedAuthorities = userModel.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         JwtClaims claims = new JwtClaims();
         claims.setSubject(userModel.getId());
@@ -38,18 +40,18 @@ public class JwtTokenProvider {
         try {
             return createToken(claims);
         } catch (JoseException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new ApplicationException(ErrorCode.errorOnGenerateToken(e.getMessage()));
         }
     }
 
-    public String generateRefreshToken(String accountId) throws UnauthorizedException {
+    public String generateRefreshToken(String accountId) throws ApplicationException {
         JwtClaims claims = new JwtClaims();
         claims.setSubject(accountId);
         claims.setExpirationTimeMinutesInTheFuture(refreshTimeInMinutes); // Refresh token berlaku selama 1 hari
         try {
             return createToken(claims);
         } catch (JoseException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new ApplicationException(ErrorCode.errorOnGenerateRefreshToken(e.getMessage()));
         }
     }
 
@@ -83,7 +85,7 @@ public class JwtTokenProvider {
         try {
             return jwtConsumer.processToClaims(jwt);
         } catch (InvalidJwtException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid(e.getMessage()));
         }
 
     }

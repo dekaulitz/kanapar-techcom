@@ -1,19 +1,19 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security;
 
-import com.github.dekalitz.kanaparktechcom.application.records.ErrorRecord;
+import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import jakarta.servlet.ServletException;
 import lombok.Getter;
 
 @Getter
 public class UnauthorizedException extends ServletException {
-    private ErrorRecord errorRecord;
+    private ErrorCode errorCode;
 
     public UnauthorizedException(String message) {
         super(message);
     }
 
-    public UnauthorizedException(ErrorRecord errorRecord) {
+    public UnauthorizedException(ErrorCode errorCode) {
         super();
-        this.errorRecord = errorRecord;
+        this.errorCode = errorCode;
     }
 }

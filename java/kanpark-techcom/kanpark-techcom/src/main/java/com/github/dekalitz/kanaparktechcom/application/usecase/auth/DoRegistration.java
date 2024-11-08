@@ -2,15 +2,16 @@ package com.github.dekalitz.kanaparktechcom.application.usecase.auth;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.RequestUserDto;
 import com.github.dekalitz.kanaparktechcom.application.dto.ResponseUserDto;
-import com.github.dekalitz.kanaparktechcom.application.exception.ApplicationException;
+import com.github.dekalitz.kanaparktechcom.application.dto.Response;
 import com.github.dekalitz.kanaparktechcom.application.mapper.UserMapper;
-import com.github.dekalitz.kanaparktechcom.application.records.ErrorRecord;
+import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
+import com.github.dekalitz.kanaparktechcom.application.usecase.BaseCase;
 import com.github.dekalitz.kanaparktechcom.application.usecase.UseCase;
 import com.github.dekalitz.kanaparktechcom.domain.service.userservice.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DoRegistration implements UseCase<ResponseUserDto, RequestUserDto> {
+public class DoRegistration extends BaseCase<ResponseUserDto> implements UseCase<Response<ResponseUserDto>, RequestUserDto> {
 
     private final UserService userService;
     private final UserMapper dtoMapper = new UserMapper();
@@ -20,13 +21,13 @@ public class DoRegistration implements UseCase<ResponseUserDto, RequestUserDto> 
     }
 
     @Override
-    public ResponseUserDto execute(RequestUserDto requestUserDto) throws ApplicationException {
+    public Response<ResponseUserDto> execute(RequestUserDto requestUserDto) {
         var email = requestUserDto.getEmail();
-        if (this.userService.findByEmail(email)) {
+        if (this.userService.isEmailExists(email)) {
             log.warn("execute {} already registered", email);
-            throw new ApplicationException(ErrorRecord.EMAIL_ALREADY_REGISTERED(email));
+            return failed(ErrorCode.errorOnEmailAlreadyRegistered());
         }
         var userModel = userService.save(dtoMapper.toUserModel(requestUserDto));
-        return ResponseUserDto.fromUserModel(userModel);
+        return ok(UserMapper.fromUserModel(userModel));
     }
 }

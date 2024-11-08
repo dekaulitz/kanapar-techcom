@@ -1,5 +1,6 @@
 package com.github.dekalitz.kanaparktechcom.infrastructure.configuration.security;
 
+import com.github.dekalitz.kanaparktechcom.application.records.ErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (MalformedClaimException e) {
-                throw new UnauthorizedException(e.getMessage());
+                throw new UnauthorizedException(ErrorCode.errorOnTokenInvalid(e.getMessage()));
             }
         }
         filterChain.doFilter(httpServletRequest, response);

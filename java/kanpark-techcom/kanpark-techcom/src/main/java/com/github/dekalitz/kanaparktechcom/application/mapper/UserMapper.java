@@ -2,6 +2,7 @@ package com.github.dekalitz.kanaparktechcom.application.mapper;
 
 import com.github.dekalitz.kanaparktechcom.application.dto.ResponseAuthDto;
 import com.github.dekalitz.kanaparktechcom.application.dto.RequestUserDto;
+import com.github.dekalitz.kanaparktechcom.application.dto.ResponseUserDto;
 import com.github.dekalitz.kanaparktechcom.domain.model.UserModel;
 
 public class UserMapper {
@@ -26,6 +27,16 @@ public class UserMapper {
                 .authorities(userModel.getAuthorities())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static ResponseUserDto fromUserModel(UserModel userModel) {
+        return ResponseUserDto.builder()
+                .id(userModel.getId())
+                .username(userModel.getUsername())
+                .email(userModel.getEmail())
+                .firstname(userModel.getFirstname())
+                .lastname(userModel.getLastname())
                 .build();
     }
 }

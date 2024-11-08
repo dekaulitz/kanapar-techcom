@@ -31,8 +31,14 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <jwt.jose.version>0.9.6</jwt.jose.version>
         <jedis.version>5.2.0</jedis.version>
+        <common.apache.version>3.17.0</common.apache.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${common.apache.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>

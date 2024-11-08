@@ -19,9 +19,11 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class AuthConfiguration {
 
     private final AuthFilter authFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    public AuthConfiguration(AuthFilter authFilter) {
+    public AuthConfiguration(AuthFilter authFilter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.authFilter = authFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Bean
@@ -30,7 +32,12 @@ public class AuthConfiguration {
                         .requestMatchers("/api/v1/auth/register").permitAll()
                         .requestMatchers("/api/v1/auth/refresh-token").permitAll()
                         .anyRequest().authenticated())
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
+
+
+        ;
         http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .authenticationManager(authenticationManager);
         http.addFilterBefore(authFilter, AuthorizationFilter.class);
