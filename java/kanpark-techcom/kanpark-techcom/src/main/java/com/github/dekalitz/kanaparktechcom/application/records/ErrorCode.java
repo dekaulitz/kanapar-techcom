@@ -21,6 +21,10 @@ public record ErrorCode(String statusCode, List<String> messages, Integer httpCo
         return new ErrorCode("X403", Collections.singletonList(errorMessage), 403);
     }
 
+    public static ErrorCode errorOnTokenExpired(String errorMessage) {
+        return new ErrorCode("X401", Collections.singletonList(errorMessage), 403);
+    }
+
     public static ErrorCode errorOnForbiddenRequest(String errorMessage) {
         return new ErrorCode("X401", Collections.singletonList(errorMessage), 403);
     }

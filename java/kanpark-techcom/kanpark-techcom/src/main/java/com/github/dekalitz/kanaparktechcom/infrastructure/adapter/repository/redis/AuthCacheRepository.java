@@ -18,7 +18,7 @@ public class AuthCacheRepository extends BaseRepository implements AuthCache {
 
     @Override
     public void setCacheAndExpired(String key, String payload, long ttl) {
-        redisTemplate.opsForValue().set(getCacheKey(key), payload, ttl, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(getCacheKey(key), payload, ttl, TimeUnit.MINUTES);
     }
 
     @Override
